@@ -3,7 +3,7 @@ import axios from 'axios';
 import './App.css'; 
 
 // لما ترفعي السيرفر، استبدلي localhost برابط السيرفر الجديد
-const API_URL = "http://localhost:5000"; 
+const API_URL = "https://full-stack-cruds.vercel.app";
 
 function App() {
   const [product, setProduct] = useState({
