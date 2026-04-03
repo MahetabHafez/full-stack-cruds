@@ -21,7 +21,7 @@ function App() {
     try {
       const res = await axios.get(`${API_URL}/products`);
       setProducts(res.data);
-    } catch (err) { console.error("Server Error"); }
+    } catch (err) { console.error("Connection Error"); }
   };
 
   useEffect(() => {
@@ -47,23 +47,25 @@ function App() {
         }
         setProduct({ title: '', price: '', taxes: '', ads: '', discount: '', count: 1, category: '' });
         getProducts();
-      } catch (err) { alert("Server Error!"); }
+      } catch (err) { alert("Server Error! Check Console."); }
     } else { alert("Please fill all fields!"); }
   };
 
   const deleteProduct = async (id) => {
     if (window.confirm("Are you sure?")) {
-      await axios.delete(`${API_URL}/products/${id}`);
-      getProducts();
+      try {
+        await axios.delete(`${API_URL}/products/${id}`);
+        getProducts();
+      } catch (err) { alert("Delete failed"); }
     }
   };
 
   const deleteAll = async () => {
     if (window.confirm("Delete ALL products?")) {
-        try {
-            await axios.delete(`${API_URL}/products`);
-            getProducts();
-        } catch (err) { alert("Error deleting all"); }
+      try {
+        await axios.delete(`${API_URL}/products`);
+        getProducts();
+      } catch (err) { alert("Delete all failed"); }
     }
   };
 
@@ -90,9 +92,7 @@ function App() {
           <input onChange={handleChange} value={product.discount} id="discount" type="number" placeholder="discount" />
           <small id="total" style={{ background: total > 0 ? '#4a0416' : 'rgb(89, 8, 8)' }}>{total || ''}</small>
         </div>
-        {mood === 'create' && (
-          <input onChange={handleChange} value={product.count} id="count" type="number" placeholder="count" />
-        )}
+        {mood === 'create' && <input onChange={handleChange} value={product.count} id="count" type="number" placeholder="count" />}
         <input onChange={handleChange} value={product.category} id="category" type="text" placeholder="category" />
         <button onClick={handleSubmit} id="submit">{mood === 'create' ? 'Create' : 'Update'}</button>
       </div>
@@ -120,12 +120,10 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {products
-              .filter(item => {
+            {products.filter(item => {
                  const val = item[searchMood] ? item[searchMood].toString().toLowerCase() : '';
                  return val.includes(search.toLowerCase());
-              })
-              .map((item, index) => (
+              }).map((item, index) => (
                 <tr key={item._id}>
                   <td>{index + 1}</td>
                   <td>{item.title}</td>
