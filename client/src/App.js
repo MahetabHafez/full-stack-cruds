@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css'; 
 
-
 const API_URL = "https://full-stack-cruds.vercel.app";
 
 function App() {
@@ -22,7 +21,7 @@ function App() {
     try {
       const res = await axios.get(`${API_URL}/products`);
       setProducts(res.data);
-    } catch (err) { console.error("Server not connected"); }
+    } catch (err) { console.error("Server Error"); }
   };
 
   useEffect(() => {
@@ -59,6 +58,15 @@ function App() {
     }
   };
 
+  const deleteAll = async () => {
+    if (window.confirm("Delete ALL products?")) {
+        try {
+            await axios.delete(`${API_URL}/products`);
+            getProducts();
+        } catch (err) { alert("Error deleting all"); }
+    }
+  };
+
   const startUpdate = (item) => {
     setProduct({ ...item, count: 1 });
     setTmpId(item._id);
@@ -68,7 +76,6 @@ function App() {
 
   return (
     <div className="cruds">
-      
       <div className="head">
         <h2>CRUDS</h2>
         <p>PRODUCT MANAGEMENT SYSTEM</p>
@@ -83,11 +90,9 @@ function App() {
           <input onChange={handleChange} value={product.discount} id="discount" type="number" placeholder="discount" />
           <small id="total" style={{ background: total > 0 ? '#4a0416' : 'rgb(89, 8, 8)' }}>{total || ''}</small>
         </div>
-        
         {mood === 'create' && (
           <input onChange={handleChange} value={product.count} id="count" type="number" placeholder="count" />
         )}
-        
         <input onChange={handleChange} value={product.category} id="category" type="text" placeholder="category" />
         <button onClick={handleSubmit} id="submit">{mood === 'create' ? 'Create' : 'Update'}</button>
       </div>
@@ -100,6 +105,12 @@ function App() {
             <button onClick={() => setSearchMood('category')}>Search By Category</button>
           </div>
         </div>
+
+        {products.length > 0 && (
+          <div id="deleteAll">
+            <button onClick={deleteAll}>Delete All ({products.length})</button>
+          </div>
+        )}
 
         <table>
           <thead>

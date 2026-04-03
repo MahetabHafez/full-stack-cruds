@@ -3,14 +3,15 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-const dbURI = "mongodb+srv://admin:Mv1X5psbXdLTBFGa@cluster0.4wlheaj.mongodb.net/productDB?retryWrites=true&w=majority";
+const dbURI = "mongodb+srv://admin:1234@cluster0.4wlheaj.mongodb.net/productDB?retryWrites=true&w=majority";
 
 mongoose.connect(dbURI)
-    .then(() => console.log("✅ Connected to MongoDB Atlas (Cloud)!"))
-    .catch(err => console.log("❌ Connection Error:", err));
+    .then(() => console.log("✅ Connected to MongoDB Atlas"))
+    .catch(err => console.log(err));
+
 const productSchema = new mongoose.Schema({
     title: String,
     price: Number,
@@ -23,7 +24,10 @@ const productSchema = new mongoose.Schema({
 
 const Product = mongoose.model('Product', productSchema);
 
-// Routes
+app.get('/', (req, res) => {
+    res.send("Server is running...");
+});
+
 app.get('/products', async (req, res) => {
     try {
         const products = await Product.find();
@@ -39,13 +43,6 @@ app.post('/products', async (req, res) => {
     } catch (err) { res.status(500).json(err); }
 });
 
-app.delete('/products/:id', async (req, res) => {
-    try {
-        await Product.findByIdAndDelete(req.params.id);
-        res.json({ message: "Deleted" });
-    } catch (err) { res.status(500).json(err); }
-});
-
 app.put('/products/:id', async (req, res) => {
     try {
         const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -53,6 +50,21 @@ app.put('/products/:id', async (req, res) => {
     } catch (err) { res.status(500).json(err); }
 });
 
-// Port configuration for Deployment
+app.delete('/products/:id', async (req, res) => {
+    try {
+        await Product.findByIdAndDelete(req.params.id);
+        res.json({ message: "Deleted" });
+    } catch (err) { res.status(500).json(err); }
+});
+
+app.delete('/products', async (req, res) => {
+    try {
+        await Product.deleteMany({});
+        res.json({ message: "All Deleted" });
+    } catch (err) { res.status(500).json(err); }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
+module.exports = app;
