@@ -4,20 +4,14 @@ const cors = require('cors');
 
 const app = express();
 
-// إعدادات CORS قوية لضمان قبول الطلبات من أي مكان
-app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}));
-
+app.use(cors());
 app.use(express.json());
 
 const dbURI = "mongodb+srv://admin:1234@cluster0.4wlheaj.mongodb.net/productDB?retryWrites=true&w=majority";
 
 mongoose.connect(dbURI)
     .then(() => console.log("✅ Connected to MongoDB Atlas"))
-    .catch(err => console.log("❌ MongoDB Connection Error:", err));
+    .catch(err => console.log("❌ MongoDB Error:", err));
 
 const productSchema = new mongoose.Schema({
     title: String,
@@ -31,8 +25,7 @@ const productSchema = new mongoose.Schema({
 
 const Product = mongoose.model('Product', productSchema);
 
-// Route للتأكد إن السيرفر شغال
-app.get('/', (req, res) => res.send("Backend Server is Live!"));
+app.get('/', (req, res) => res.send("Server is Live!"));
 
 app.get('/products', async (req, res) => {
     try {
@@ -49,13 +42,6 @@ app.post('/products', async (req, res) => {
     } catch (err) { res.status(500).json(err); }
 });
 
-app.put('/products/:id', async (req, res) => {
-    try {
-        const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json(updated);
-    } catch (err) { res.status(500).json(err); }
-});
-
 app.delete('/products/:id', async (req, res) => {
     try {
         await Product.findByIdAndDelete(req.params.id);
@@ -69,8 +55,5 @@ app.delete('/products', async (req, res) => {
         res.json({ message: "All Deleted" });
     } catch (err) { res.status(500).json(err); }
 });
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 
 module.exports = app;
