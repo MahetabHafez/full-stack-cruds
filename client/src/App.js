@@ -42,19 +42,31 @@ function App() {
     } else { alert("Fill all fields!"); }
   };
 
-  const deleteProduct = async (id) => {
-    if (window.confirm("Sure?")) {
-      await axios.delete(`${API_URL}/products/${id}`);
-      getProducts();
+const deleteProduct = async (id) => {
+    if (window.confirm("Are you sure?")) {
+        try {
+           
+            await axios.delete(`${API_URL}/products/${id}`); 
+            getProducts(); 
+        } catch (err) {
+            console.error("Delete Error:", err);
+            alert("Delete failed!");
+        }
     }
-  };
+};
+
+
 
   const deleteAll = async () => {
-    if (window.confirm("Delete ALL?")) {
-      await axios.delete(`${API_URL}/products`);
-      getProducts();
+    if (window.confirm("Are you sure you want to delete ALL products?")) {
+        try {
+            await axios.delete(`${API_URL}/products`);
+            getProducts(); 
+        } catch (err) {
+            alert("Error: Delete All failed!");
+        }
     }
-  };
+};
 
   return (
     <div className="cruds">
