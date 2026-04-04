@@ -30,17 +30,29 @@ function App() {
   }, [product]);
 
   const handleSubmit = async () => {
-    if (product.title && product.price && product.category) {
-      try {
-        await axios.post(`${API_URL}/products`, { ...product, total });
-        setProduct({ title: '', price: '', taxes: '', ads: '', discount: '', count: 1, category: '' });
-        getProducts();
-      } catch (err) { 
-        alert("Error: " + (err.response?.data?.message || err.message));
-        console.log(err);
+  if (product.title && product.price && product.category) {
+    try {
+      if (mood === 'create') {
+        for (let i = 0; i < (product.count || 1); i++) {
+          await axios.post(`${API_URL}/products`, { ...product, total });
+        }
+      } else {
+        await axios.put(`${API_URL}/products/${tmpId}`, { ...product, total });
+        setMood('create');
       }
-    } else { alert("Fill all fields!"); }
-  };
+
+      
+      setProduct({ title: '', price: '', taxes: '', ads: '', discount: '', count: 1, category: '' });
+      getProducts();
+      alert("Success!");
+      
+    } catch (err) {
+      alert("Error: " + (err.response?.data?.message || err.message));
+    }
+  } else {
+    alert("Fill all fields!");
+  }
+};
 
 const deleteProduct = async (id) => {
     if (window.confirm("Are you sure?")) {
