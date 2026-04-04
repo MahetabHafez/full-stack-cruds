@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css'; 
 
-const API_URL = "https://full-stack-cruds-copv.vercel.app"; 
+const API_URL = "https://full-stack-cruds.vercel.app"; 
 
 function App() {
   const [product, setProduct] = useState({ title: '', price: '', taxes: '', ads: '', discount: '', count: 1, category: '' });
