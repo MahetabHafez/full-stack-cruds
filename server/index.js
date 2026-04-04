@@ -1,14 +1,15 @@
-app.get('/', (req, res) => {
-    res.send("Backend Server is Running Successfully! 🚀");
-});
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-const app = express();
+const app = express(); // لازم دي تيجي قبل أي app.get
 app.use(cors());
 app.use(express.json());
 
+// الصفحة الرئيسية للسيرفر
+app.get('/', (req, res) => {
+    res.send("Backend Server is Running Successfully! 🚀");
+});
 
 const dbURI = "mongodb+srv://admin:1234@cluster0.4wlheaj.mongodb.net/productDB?retryWrites=true&w=majority";
 
@@ -23,7 +24,7 @@ const productSchema = new mongoose.Schema({
 
 const Product = mongoose.model('Product', productSchema);
 
-
+// 1. Get All
 app.get('/products', async (req, res) => {
     try {
         const products = await Product.find();
@@ -31,7 +32,7 @@ app.get('/products', async (req, res) => {
     } catch (err) { res.status(500).json({error: err.message}); }
 });
 
-
+// 2. Create
 app.post('/products', async (req, res) => {
     try {
         const newProduct = new Product(req.body);
@@ -40,7 +41,7 @@ app.post('/products', async (req, res) => {
     } catch (err) { res.status(500).json({error: err.message}); }
 });
 
-
+// 3. Delete Single
 app.delete('/products/:id', async (req, res) => {
     try {
         await Product.findByIdAndDelete(req.params.id);
@@ -48,7 +49,7 @@ app.delete('/products/:id', async (req, res) => {
     } catch (err) { res.status(500).json({error: err.message}); }
 });
 
-
+// 4. Delete All
 app.delete('/products', async (req, res) => {
     try {
         await Product.deleteMany({});
@@ -56,7 +57,7 @@ app.delete('/products', async (req, res) => {
     } catch (err) { res.status(500).json({error: err.message}); }
 });
 
-
+// 5. Update
 app.put('/products/:id', async (req, res) => {
     try {
         const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
