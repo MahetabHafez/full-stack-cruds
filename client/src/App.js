@@ -156,7 +156,7 @@ function App() {
             <button 
                  onClick={() => updateProduct(item)} 
                  style={{ 
-                   background: '#218838', // لون أخضر غامق واحترافي
+                   background: '#166226ff', 
                    color: 'white', 
                    width: '90%', 
                    padding: '5px', 
