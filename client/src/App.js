@@ -85,7 +85,11 @@ function App() {
 
   return (
     <div className="cruds">
-      <div className="head"><h2>CRUDS</h2><p>PRODUCT MANAGEMENT SYSTEM</p></div>
+      <div className="head">
+        <h2>CRUDS</h2>
+        <p>PRODUCT MANAGEMENT SYSTEM</p>
+      </div>
+
       <div className="inputs">
         <input onChange={(e) => setProduct({...product, title: e.target.value})} value={product.title} type="text" placeholder="title" />
         <div className="price">
@@ -99,6 +103,7 @@ function App() {
         <input onChange={(e) => setProduct({...product, category: e.target.value})} value={product.category} type="text" placeholder="category" />
         <button onClick={handleSubmit} id="submit">{mood === 'create' ? 'Create' : 'Update'}</button>
       </div>
+
       <div className="outputs">
         <div className="searchBlock">
           <input onChange={(e) => setSearch(e.target.value)} type="text" placeholder={`Search By ${searchMood}`} />
@@ -107,15 +112,62 @@ function App() {
             <button onClick={() => setSearchMood('category')}>Search By Category</button>
           </div>
         </div>
-        {products.length > 0 && <button onClick={deleteAll} className="delete-all-btn">Delete All ({products.length})</button>}
+
+ 
+        {products.length > 0 && (
+          <button 
+            onClick={deleteAll} 
+            style={{ 
+              width: '100%', 
+              background: '#500018', 
+              color: 'white', 
+              padding: '10px', 
+              margin: '20px 0', 
+              border: 'none', 
+              cursor: 'pointer', 
+              borderRadius: '20px',
+              fontSize: '16px',
+              fontWeight: 'bold'
+            }}
+          >
+            Delete All ({products.length})
+          </button>
+        )}
+
         <table>
-          <thead><tr><th>id</th><th>title</th><th>total</th><th>category</th><th>update</th><th>delete</th></tr></thead>
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>title</th>
+              <th>total</th>
+              <th>category</th>
+              <th>update</th>
+              <th>delete</th>
+            </tr>
+          </thead>
           <tbody>
             {filteredProducts.map((item, index) => (
               <tr key={item._id}>
-                <td>{index + 1}</td><td>{item.title}</td><td>{item.total}</td><td>{item.category}</td>
-                <td><button onClick={() => updateProduct(item)}>update</button></td>
-                <td><button className="delete-btn" onClick={() => deleteProduct(item._id)}>delete</button></td>
+                <td>{index + 1}</td>
+                <td>{item.title}</td>
+                <td>{item.total}</td>
+                <td>{item.category}</td>
+                <td>
+                  <button 
+                    onClick={() => updateProduct(item)} 
+                    style={{ background: '#470053', color: 'white', width: '90%', padding: '5px', border: 'none', cursor: 'pointer', borderRadius: '4px' }}
+                  >
+                    update
+                  </button>
+                </td>
+                <td>
+                  <button 
+                    onClick={() => deleteProduct(item._id)}
+                    style={{ background: '#500018', color: 'white', width: '90%', padding: '5px', border: 'none', cursor: 'pointer', borderRadius: '4px' }}
+                  >
+                    delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
