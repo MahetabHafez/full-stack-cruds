@@ -101,35 +101,22 @@ function App() {
         </div>
         <input onChange={(e) => setProduct({...product, count: e.target.value})} value={product.count} type="number" placeholder="count" />
         <input onChange={(e) => setProduct({...product, category: e.target.value})} value={product.category} type="text" placeholder="category" />
-        <button onClick={handleSubmit} id="submit">{mood === 'create' ? 'Create' : 'Update'}</button>
+        <button onClick={handleSubmit} id="submit" className="main-btn">
+            {mood === 'create' ? 'Create' : 'Update'}
+        </button>
       </div>
 
       <div className="outputs">
         <div className="searchBlock">
           <input onChange={(e) => setSearch(e.target.value)} type="text" placeholder={`Search By ${searchMood}`} />
           <div className="btnSearch">
-            <button onClick={() => setSearchMood('title')}>Search By Title</button>
-            <button onClick={() => setSearchMood('category')}>Search By Category</button>
+            <button className="main-btn" onClick={() => setSearchMood('title')}>Search By Title</button>
+            <button className="main-btn" onClick={() => setSearchMood('category')}>Search By Category</button>
           </div>
         </div>
 
- 
         {products.length > 0 && (
-          <button 
-            onClick={deleteAll} 
-            style={{ 
-              width: '100%', 
-              background: '#500018', 
-              color: 'white', 
-              padding: '10px', 
-              margin: '20px 0', 
-              border: 'none', 
-              cursor: 'pointer', 
-              borderRadius: '20px',
-              fontSize: '16px',
-              fontWeight: 'bold'
-            }}
-          >
+          <button onClick={deleteAll} className="delete-all-btn">
             Delete All ({products.length})
           </button>
         )}
@@ -153,27 +140,12 @@ function App() {
                 <td>{item.total}</td>
                 <td>{item.category}</td>
                 <td>
-            <button 
-                 onClick={() => updateProduct(item)} 
-                 style={{ 
-                   background: '#166226ff', 
-                   color: 'white', 
-                   width: '90%', 
-                   padding: '5px', 
-                   border: 'none', 
-                   cursor: 'pointer', 
-                   borderRadius: '4px',
-                   fontWeight: 'bold'
-                 }}
-               >
-                 update
-            </button>
-                 </td>
+                  <button className="btn-update" onClick={() => updateProduct(item)}>
+                    update
+                  </button>
+                </td>
                 <td>
-                  <button 
-                    onClick={() => deleteProduct(item._id)}
-                    style={{ background: '#500018', color: 'white', width: '90%', padding: '5px', border: 'none', cursor: 'pointer', borderRadius: '4px' }}
-                  >
+                  <button className="btn-delete" onClick={() => deleteProduct(item._id)}>
                     delete
                   </button>
                 </td>
