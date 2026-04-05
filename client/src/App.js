@@ -153,13 +153,22 @@ function App() {
                 <td>{item.total}</td>
                 <td>{item.category}</td>
                 <td>
-                  <button 
-                    onClick={() => updateProduct(item)} 
-                    style={{ background: '#470053', color: 'white', width: '90%', padding: '5px', border: 'none', cursor: 'pointer', borderRadius: '4px' }}
-                  >
-                    update
-                  </button>
-                </td>
+            <button 
+                 onClick={() => updateProduct(item)} 
+                 style={{ 
+                   background: '#218838', // لون أخضر غامق واحترافي
+                   color: 'white', 
+                   width: '90%', 
+                   padding: '5px', 
+                   border: 'none', 
+                   cursor: 'pointer', 
+                   borderRadius: '4px',
+                   fontWeight: 'bold'
+                 }}
+               >
+                 update
+            </button>
+                 </td>
                 <td>
                   <button 
                     onClick={() => deleteProduct(item._id)}
